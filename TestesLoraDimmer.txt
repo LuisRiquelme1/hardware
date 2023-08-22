@@ -1,0 +1,41 @@
+
+///////////Processo de validação de qual circuito usar///////////
+
+O processo de validação da ideia inicial do projeto: um dimer controlado por PWM, monitorando o valor de tensão de um LDR (Light Dependent Resistor) e variando portanto o duty cycle da alimentação de uma lâmpada passou pela etapa incial de se realizar esses testes usando uma lâmpada comum de residência 8W, 120-220V. 
+
+A ideia era inserir um circuito com optoaclopador que fizesse o controle do fluxo luminoso (com o duty cycle de um PWM) chaveando o GND de um SCR (Silicon controlled rectifier). O optoacoplador tinha como função simplesmente isolar a porta digital do microcontrolador do circuito de potência. Dimerizar (ou controlar a intensidade) de uma lâmpada de bocal comum de corrente alternada (AC) usando modulação por largura de pulso (PWM) pode ser desafiador por várias razões:
+
+Natureza de corrente alternada: A corrente alternada muda de direção constantemente, o que pode levar a problemas de flicker (oscilação rápida) e strobing (piscamento) perceptíveis para o olho humano. Isso pode causar desconforto visual ou até mesmo problemas de saúde em algumas pessoas. No caso do nosso circuito, era justamente o que ocorria: a luminosidade da lampada não variava de forma gradativa (dimerizada) pois o circuito implementado não era capaz de fazer o controle de potência da lâmpada, apenas variava a tensão média, mas a corrente subia para compensar portanto a lâmpada simplesmente piscava mais rápido ou mais devagar dependendo do duty cycle.
+
+Compatibilidade com lâmpadas: Nem todas as lâmpadas são compatíveis com controle por PWM. Algumas lâmpadas de baixa qualidade podem ser mais suscetíveis a problemas de flicker ou podem não funcionar corretamente em certos níveis de intensidade. Tentamos aproveitar a ideia do circuito usando uma lâmpada específica que fosse dimerizada, mas elas precisam de um driver (justamente o dimer) para funcionar de forma adequada. Nosso circuito não funcionava como driver.
+
+Aquecimento e vida útil: O controle por PWM envolve ligar e desligar rapidamente a lâmpada em uma frequência alta. Isso pode causar maior estresse nos componentes internos da lâmpada e potencialmente reduzir sua vida útil. Além disso, a lâmpada pode aquecer e esfriar repetidamente, o que pode levar a danos prematuros.
+
+Interferência eletromagnética (EMI): O controle por PWM pode gerar interferência eletromagnética de alta frequência, que pode afetar outros dispositivos eletrônicos próximos e até mesmo causar problemas em sistemas de comunicação sem fio.
+
+Projeto do circuito: Projetar um circuito de controle PWM robusto requer cuidados para lidar com a alta tensão e corrente da rede elétrica, bem como com as variações de carga da lâmpada. Isso pode envolver o uso de componentes como tiristores, relés ou circuitos de acoplamento óptico para garantir um controle seguro e eficaz. Essa foi justamente a maior dificuldade. Certamente em um projeto com maior duração poderíamos nos debruçar sobre esse problema e encontrar uma solução para dimerização usando um circuito de potência. Mas dado os desafios e desconhecimentos encontrados no caminho não tivemos tempo de implementar esse circuito.
+
+Compatibilidade com sistemas existentes: Se você estiver tentando integrar o controle PWM com um sistema de iluminação já existente, pode haver desafios adicionais de integração e compatibilidade entre o sistema de controle e os componentes de iluminação.
+
+Regulamentações e normas: Dependendo da sua localização, pode haver regulamentações específicas relacionadas ao controle de iluminação e à emissão de interferência eletromagnética. Certificar-se de que seu sistema atenda a essas regulamentações é importante.
+
+No geral, enquanto é possível dimerizar uma lâmpada de bocal comum usando PWM, é importante considerar todas essas dificuldades e desafios para garantir um funcionamento seguro, eficaz e em conformidade com as normas. Se você não estiver familiarizado com eletrônica e sistemas elétricos, é aconselhável buscar ajuda de profissionais qualificados ao projetar e implementar esse tipo de sistema.  
+
+
+///////////Mudança de abordagem///////////
+
+Notando que a dimerização de uma lâmpada comum não era uma tarefa simples, a equipe em consenso optou por fazer modificações no circuito e na opção de luz: uma fita de leds 12V.
+
+Isso se provou mais eficiente. Em apenas uma manhã de testes de bancada implementando um circuito de controle usando um transistor BJT (PWM na base, coletor e emissor chaveando no duty cycle desejado) conseguimos fazer a fita de leds dimerizar. Usamos uma fonte de bancada e um gerador de sinais para simular o PWM que o micro geraria.
+
+A próxima etapa, uma vez que o circuito principal do projeto estava validado, era validar as outras soluções: o circuito do LDR que é um simples divisor resistivo em uma porta analógica do micro, o que conseguimos também fazer em algumas horas apenas; e o circuito de leitura de consumo, que deu um pouco mais de trabalho pois precisamos dimensionar um filtro passa faixa e um circuito RC usando um resistor shunt para leitura de consumo.
+
+///////////Circuitos validados: layout e prototipação da placa de circuito impresso///////////
+
+Uma vez com os circuitos testados e validados em bancada, partimos para o layout e prototipação de uma placa de circuito impresso simples com esses circuitos. O processo de prototipação da placa levou uma tarde e foi feito utilizando os equipamentos do laboratório de sistemas embarcados no HUB: LSE. Um dos integrantes trabalha no local e tem acesso a esses equipamentos. No dia seguinte, a etapa de manufatura e soldagem ocorreu e no mesmo dia, testes de continuidade e funcionalidade da placa prototipada para detectar possíveis erros de soldagem e montagem. 
+
+Esse processo de teste levou alguns dias para ser finalizado e eliminar quaisquer maus-contatos da placa. 
+
+///////////Modelagem de um case para o circuito///////////
+
+A etapa seguinte foi modelar um case com as dimensões adequadas para o sistema. As medidas da placa foram tomadas e um case apropriado foi modelado. Na pesquisa de preços em locais de impressão 3D, não encontramos nenhum preço satisfatório e acabamos optando por comprar uma patola de sistemas eletrônicos por um preço razoável, e fizemos as adaptações necessárias como furos para display, entrada/saída de cabos e para o LDR. Essa etapa levou um dia.
